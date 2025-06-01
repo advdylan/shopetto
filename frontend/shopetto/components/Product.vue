@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-2xl font-bold mb-4">Products</h1>
+    <h1 class="text-2xl font-sans">Products</h1>
     <div v-if="pending">Loading...</div>
     <div v-else>
       <ul>
@@ -12,6 +12,13 @@
   </div>
 </template>
 
-<script setup>
-const { data: products, pending, error } = await useFetch('http://localhost:8000/api/products/')
+<script setup lang="ts">
+
+type Product = {
+  id: number,
+  name: string,
+  price: number
+}
+
+const { data: products, pending, error } = await useFetch<Product[]>('http://127.0.0.1:8000/api/product/')
 </script>
