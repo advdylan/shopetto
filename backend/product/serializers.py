@@ -5,7 +5,6 @@ from product.models import *
 class RecursiveCategorySerializer(serializers.Serializer):
     def to_representation(self, value):
         serializer = CategorySerializer(value, context=self.context)
-        print(serializer)
         return serializer.data
 class CategorySerializer(serializers.ModelSerializer):
   parent = RecursiveCategorySerializer()

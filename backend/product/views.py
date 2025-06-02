@@ -15,3 +15,8 @@ class ProductViewSet(viewsets.ModelViewSet):
   serializer_class = ProductSerializer
   permission_classes = [ReadOnlyOrAuthenticated]
 
+class CategoryViewSet(viewsets.ModelViewSet):
+
+  queryset = Category.objects.all()
+  serializer_class = CategorySerializer
+  permission_classes = [ReadOnlyOrAuthenticated]
