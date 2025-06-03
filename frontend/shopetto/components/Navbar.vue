@@ -1,13 +1,35 @@
 <template>
 
+
+
+
   
   
-  <nav class="bg-white shadow px-4 py-3 flex items-center justify-between">
-    <div class="text-xl font-bold">Shopetto</div>
+  <nav class="bg-stone-200 shadow-lg px-4 py-3 rounded-br-md rounded-bl-md flex items-center justify-between">
+    <div class="text-xl font-bold">Shopetto
+      
+    </div>
+    <div  @mouseenter="categoryStore.onMouseEnter" @mouseleave="categoryStore.onMouseLeave" class="absolute left-1/2 transform -translate-x-1/2 text-black font-bold hover:text-blue-600 cursor-pointer flex items-center justify-center gap-x-1 py-1">
+      Shop
+      <Icon size="1.5em" name="mdi-light:format-list-bulleted"/>
+    </div>
     <div class="hidden md:flex space-x-4">
-      <a href="/" class="text-gray-700 hover:text-blue-600">Home</a>
-      <a href="/shop" class="text-gray-700 hover:text-blue-600">Shop</a>
-      <a href="/contact" class="text-gray-700 hover:text-blue-600">Contact</a>
+      <button href="/"
+        class="text-black-700 hover:text-blue-600  cursor-pointer flex items-center justify-center gap-x-1 py-1">
+        <Icon size="1.5em" name="mdi-light:home" />
+        Home
+      </button>
+      <button href="/contact"
+        class="text-black-700 hover:text-blue-600 cursor-pointer flex items-center justify-center gap-x-1 py-1">
+        <Icon size="1.5em" name="mdi-light:phone" />
+        Contact
+      </button>
+      <button href="/"
+        class="text-black-700 hover:text-blue-600 cursor-pointer flex items-center justify-center gap-x-1 py-1">
+        <Icon size="1.5em" name="mdi-light:cart" />
+        Cart
+      </button>
+      
     </div>
     <button @click="mobileOpen = !mobileOpen" class="md:hidden">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -17,27 +39,38 @@
     </button>
 
     <div v-if="mobileOpen" class="absolute top-16 left-0 w-full bg-white shadow-md md:hidden">
-      <a href="/" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Home <Icon name="mdi-light:account" style="color: black" /> </a>
+      <a href="/" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Home<Icon name="mdi-light:account"/> </a>
       <a href="/shop" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Shop</a>
       <a href="/contact" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Contact</a>
     </div>
+
+    
+    
+    
+
   </nav>
+  <div class="flex items-center justify-center">
+    <CategoryDropDown/>
+  </div>
+  
+  
+  
 </template>
 
 <script setup lang="ts">
-import { useCategoryStore } from '~/stores/products';
+
 import { Icon } from '#components'
 import { ref } from 'vue';
+import CategoryDropDown from './CategoryDropDown.vue';
+import { useCategoryStore } from '~/stores/products'
 
 const mobileOpen = ref(false)
+const categoryDropDownActive = ref(false)
 const categoryStore = useCategoryStore()
 
 
-
 onMounted(() => {
-  if(categoryStore.categories.length === 0) {
-    categoryStore.fetchCategories()
-  }
+
 })
 
 </script>
