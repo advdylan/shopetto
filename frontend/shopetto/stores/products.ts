@@ -1,44 +1,53 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 import type { Category } from '~/types/category'
 
+export const useCategoryStore = defineStore('category', () => {
+  const config = useRuntimeConfig()
+  let timeout: ReturnType<typeof setTimeout> | null = null
 
-let timeout: ReturnType<typeof setTimeout> | null = null
+  // State
+  const categories = ref<Category[]>([])
+  const dropdownHover = ref(false)
+  const chosenCategory = ref<Category | null>(null)
+  const chosenSubCategory = ref<Category | null>(null)
 
-export const useCategoryStore = defineStore('category', {
-  state: () => ({
-    categories: [] as Category[],
-    dropdownHover: false,
+  // Actions
+  async function fetchCategories() {
+    const url = `${config.public.apiBase}/api/categories/`
+
+    try {
+      const response = await fetch(url)
+      if (!response.ok) throw new Error('Failed to fetch categories')
+
+      const data: Category[] = await response.json()
+      console.log('Fetched categories:', data)
+
+      categories.value = data
+    } catch (error) {
+      console.error('Failed to fetch categories', error)
+    }
+  }
+
+  function onMouseEnter() {
+    if (timeout) clearTimeout(timeout)
     
-  }),
-  actions: {
+    dropdownHover.value = true // activates the dropdown
+    chosenCategory.value = categories.value[0] // choosing first category to highlight
+  }
 
-    async fetchCategories() {
-      const config = useRuntimeConfig()
-      const url = `${config.public.apiBase}/api/categories/`
+  function onMouseLeave() {
+    timeout = setTimeout(() => {
+      dropdownHover.value = false
+      chosenCategory.value = null
+    }, 100)
+  }
 
-      try {
-        const respond = await fetch(url)
-        if (!respond.ok) throw new Error('Failed to fetch categories')
-
-        const data: Category[] = await respond.json()
-        console.log('Fetched categories:', data)
-
-        this.categories = data
-      } catch (error) {
-        console.error('Failed to fetch categories', error)
-      }
-},
-    onMouseEnter() {
-      console.log("mouseEnter")
-      if (timeout) clearTimeout(timeout)
-      this.dropdownHover = true
-    },
-    onMouseLeave() {
-      console.log(timeout)
-      timeout = setTimeout(() => {
-        this.dropdownHover = false
-      }, 100)
-    },
-
+  return {
+    categories,
+    dropdownHover,
+    chosenCategory,
+    fetchCategories,
+    onMouseEnter,
+    onMouseLeave
   }
 })

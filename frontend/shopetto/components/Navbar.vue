@@ -65,7 +65,6 @@ import CategoryDropDown from './CategoryDropDown.vue';
 import { useCategoryStore } from '~/stores/products'
 
 const mobileOpen = ref(false)
-const categoryDropDownActive = ref(false)
 const categoryStore = useCategoryStore()
 
 

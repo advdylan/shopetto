@@ -10,7 +10,8 @@ class CategorySerializer(serializers.ModelSerializer):
   parent = RecursiveCategorySerializer()
   class Meta:
     model = Category
-    fields = ('name',
+    fields = ('id',
+              'name',
               'slug',
               'parent')
 
