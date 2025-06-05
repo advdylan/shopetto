@@ -5,7 +5,7 @@
 
   
   
-  <nav class="bg-stone-200 shadow-lg px-4 py-3 rounded-br-md rounded-bl-md flex items-center justify-between">
+  <nav class="bg-gradient-to-r from-ali2 from-10% via-ali1 via-30% to-ali2 to-90% shadow-lg px-4 py-3 rounded-br-md rounded-bl-md flex items-center justify-between">
     <div class="text-xl font-bold">Shopetto
       
     </div>

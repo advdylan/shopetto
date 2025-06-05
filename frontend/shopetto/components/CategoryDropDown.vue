@@ -3,13 +3,14 @@
   v-if="categoryStore.dropdownHover"
   @mouseenter="categoryStore.onMouseEnter"
   @mouseleave="categoryStore.onMouseLeave()"
-  class="bg-stone-100 w-320 h-85 shadow-lg mt-2 rounded-md flex place-items-start gap-4 px-2 py-2"
+  class="bg-gradient-to-r from-ali2 from-10% via-ali1 via-30% to-ali2 to-90% w-320 h-85 shadow-lg mt-2 rounded-md flex place-items-start gap-4 px-2 py-2"
 >
   <!-- Left Column -->
   <div class="w-1/4 h-full border-r border-solid border-stone-300">
     <ul class="list-inside  mx-3">
       <li
         v-for="category in parentCategories"
+        :key="category.id"
         class="p-2 cursor-pointer "
         @mouseenter="() => chosenCategory = category">
 
@@ -28,9 +29,11 @@
     <li
       v-for="category in getChildrenOf(chosenCategory)"
       :key="category.id"
-      class="p-2"
+      class="p-2 cursor-pointer"
+      @mouseenter="() => chosenSubCategory = category"
     >
-      <span class="inline-block border-b border-stone-300 shadow rounded-sm p-1 w-full">
+      <span class="inline-block border-b border-stone-300 shadow rounded-sm p-1 w-full"
+      :class="activeSub(category)">
         {{ category.name }}
       </span>
     </li>
@@ -38,7 +41,21 @@
 </div>
 
   <!-- Right Column -->
-  <div class="w-2/4 h-full mr-10">Right</div>
+      <div class="w-1/2 h-full">
+    <div class="grid grid-cols-3 gap-2">
+      <span
+        v-for="product in chosenProducts"
+        :key="product.id"
+        class="w-full h-20 bg-gray-200 flex items-center justify-center rounded"
+      >
+        <div class=""></div>
+      </span>
+    </div>
+      
+    
+
+  </div>
+
 </div>
 </template>
 
@@ -51,29 +68,18 @@ import type { Product } from '~/types/product'
 
 
 const categoryStore = useCategoryStore()
-const {categories, chosenCategory} = storeToRefs(categoryStore)
+const {categories, products, chosenCategory, chosenSubCategory, childCategoryMap, } = storeToRefs(categoryStore)
+const { getChildrenOf } = categoryStore
 
-const parentCategories = computed(() => {
-  return categories.value.filter(category => category.parent === null)
+const parentCategories = computed(() =>
+  categories.value
+    .filter(cat => cat.parent === null)
+)
+
+const chosenProducts = computed(() => {
+  return products.value.filter(product => product.category?.id === chosenSubCategory.value?.id)
+
 })
-
-const childCategoryMap = computed(() => {
-  const map = new Map<number, Category[]>()
-  for (const cat of categories.value) {
-    const parentId = cat.parent?.id
-    if (parentId != null) {
-      if (!map.has(parentId)) {
-        map.set(parentId, [])
-      }
-      map.get(parentId)!.push(cat)
-    }
-  }
-  return map
-})
-
-function getChildrenOf(category: Category | null) {
-  return category ? childCategoryMap.value.get(category.id) || [] : []
-}
 
 const productMap = computed(() => {
   return 0
@@ -86,12 +92,20 @@ function getProductOf(product: Product | null) {
 const active = computed(() => (category: Category) => {
   return category?.id === chosenCategory.value?.id ? 'bg-stone-400' : ''
 })
+const activeSub = computed(() => (category: Category) => {
+  return category?.id === chosenSubCategory.value?.id ? 'bg-stone-400' : ''
+})
 
 
 onMounted(() => {
   if (categoryStore.categories.length === 0) {
     categoryStore.fetchCategories()
   }
+
+  if(categoryStore.products.length ===0) {
+    categoryStore.fetchProducts()
+  }
+  
   
 })
 </script>

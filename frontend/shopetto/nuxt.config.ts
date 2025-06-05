@@ -13,9 +13,15 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: [
-      tailwindcss(),
     ],
   },
+  postcss: {
+    plugins: {
+    '@tailwindcss/postcss': {},
+    autoprefixer: {}
+  }
+  },
+  
   modules: ["@pinia/nuxt", "@nuxt/icon"],
 
   runtimeConfig: {
