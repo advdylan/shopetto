@@ -12,6 +12,7 @@
         v-for="category in parentCategories"
         :key="category.id"
         class="p-2 cursor-pointer "
+        href="/product-list"
         @mouseenter="() => chosenCategory = category">
 
         <span class="inline-block border-b border-stone-300 shadow rounded-sm p-1 w-full hover:bg-stone-400"
@@ -42,14 +43,18 @@
 
   <!-- Right Column -->
       <div class="w-1/2 h-full">
-    <div class="grid grid-cols-3 gap-2">
-      <span
+    <div class="grid grid-cols-6 gap-6 gap-y-10 pt-2">
+      <div
         v-for="product in chosenProducts"
         :key="product.id"
-        class="w-full h-20 bg-gray-200 flex items-center justify-center rounded"
+        class="w-full h-20 bg-stone-300 flex flex-col justify-center items-center rounded-sm"
       >
-        <div class=""></div>
-      </span>
+        <div class="w-full bg-sky-50 h-2/3 flex justify-center items-center shadow rounded-sm cursor-pointer">
+          IMG 
+        </div>
+       
+        <div class="bg-stone-100 w-full h-1/3 flex justify-center items-center shadow rounded-sm cursor-pointer">{{product.price}} PLN</div>
+    </div>
     </div>
       
     
@@ -68,13 +73,10 @@ import type { Product } from '~/types/product'
 
 
 const categoryStore = useCategoryStore()
-const {categories, products, chosenCategory, chosenSubCategory, childCategoryMap, } = storeToRefs(categoryStore)
+const {categories, products, chosenCategory, chosenSubCategory, childCategoryMap, parentCategories } = storeToRefs(categoryStore)
 const { getChildrenOf } = categoryStore
 
-const parentCategories = computed(() =>
-  categories.value
-    .filter(cat => cat.parent === null)
-)
+
 
 const chosenProducts = computed(() => {
   return products.value.filter(product => product.category?.id === chosenSubCategory.value?.id)

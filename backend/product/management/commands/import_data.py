@@ -12,7 +12,6 @@ class Command(BaseCommand):
       with open('/home/dylan/shopetto/backend/product/management/commands/data/categories_and_products.json') as f:
           data = json.load(f)
     
-
       cat_map = {}
 
       self.stdout.write("Creating categories...")

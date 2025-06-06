@@ -44,6 +44,11 @@ export const useCategoryStore = defineStore('category', () => {
       console.error('Failed to fetch products', error)
     }
   }
+
+  const parentCategories = computed(() =>
+    categories.value
+      .filter(cat => cat.parent === null)
+  )
   
   const childCategoryMap = computed(() => {
   const map = new Map<number, Category[]>()
@@ -93,6 +98,7 @@ export const useCategoryStore = defineStore('category', () => {
     products,
     chosenSubCategory,
     childCategoryMap,
+    parentCategories,
     fetchCategories,
     fetchProducts,
     onMouseEnter,
