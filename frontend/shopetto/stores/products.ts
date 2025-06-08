@@ -45,6 +45,10 @@ export const useCategoryStore = defineStore('category', () => {
     }
   }
 
+  const chosenProducts = computed(() => {
+    return products.value.filter(product => product.category?.id === chosenSubCategory.value?.id)
+  })
+
   const parentCategories = computed(() =>
     categories.value
       .filter(cat => cat.parent === null)
@@ -99,6 +103,7 @@ export const useCategoryStore = defineStore('category', () => {
     chosenSubCategory,
     childCategoryMap,
     parentCategories,
+    chosenProducts,
     fetchCategories,
     fetchProducts,
     onMouseEnter,
