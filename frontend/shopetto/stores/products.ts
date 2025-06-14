@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import CategoryDropDown from '~/components/CategoryDropDown.vue'
 import type { Category } from '~/types/category'
 import type { Product } from '~/types/product'
 
@@ -10,8 +11,12 @@ export const useCategoryStore = defineStore('category', () => {
   const categories = ref<Category[]>([])
   const products = ref<Product[]>([])
   const dropdownHover = ref(false)
+  // Chosen categories for Navbar
   const chosenCategory = ref<Category | null>(null)
   const chosenSubCategory = ref<Category | null>(null)
+  // Chosen categories for ProductList
+  const chosenCategoryForList = ref<Category | null>(null)
+  const chosenSubCategoryForList = ref<Category | null>(null)
 
   // Actions
   async function fetchCategories() {
@@ -24,7 +29,16 @@ export const useCategoryStore = defineStore('category', () => {
       const data: Category[] = await response.json()
       console.log('Fetched categories:', data)
 
+
+      //temporary displaying the first categories with it's first subcategory
       categories.value = data
+      chosenCategoryForList.value = categories.value[0]
+
+      const childrens = getChildrenOf(chosenCategoryForList.value)
+      chosenSubCategoryForList.value = childrens[0]
+        
+
+      
     } catch (error) {
       console.error('Failed to fetch categories', error)
     }
@@ -95,6 +109,14 @@ export const useCategoryStore = defineStore('category', () => {
     }, 100)
   }
 
+  function isParentCategory(category: Category) {
+    if (category.parent === null) {
+      console.log(`Parent Category Detected: ${category}`)
+      return true
+    }
+    return false
+  }
+
   return {
     categories,
     dropdownHover,
@@ -104,11 +126,14 @@ export const useCategoryStore = defineStore('category', () => {
     childCategoryMap,
     parentCategories,
     chosenProducts,
+    chosenCategoryForList,
+    chosenSubCategoryForList,
     fetchCategories,
     fetchProducts,
     onMouseEnter,
     onMouseLeave,
     getChildrenOf,
+    isParentCategory,
     
   }
 })

@@ -1,7 +1,7 @@
 <template>
 
   <nav class="bg-gradient-to-r from-ali2 from-10% via-ali1 via-30% to-ali2 to-90% shadow-lg px-4 py-3 rounded-br-md rounded-bl-md flex items-center justify-between">
-    <div class="text-xl font-bold">Shopetto
+    <div class="text-xl font-bold cursor-pointer"><NuxtLink to="/"> Shopetto </NuxtLink>
       
     </div>
     <div  @mouseenter="categoryStore.onMouseEnter" @mouseleave="categoryStore.onMouseLeave" class="absolute left-1/2 transform -translate-x-1/2 text-black font-bold hover:text-blue-600 cursor-pointer flex items-center justify-center gap-x-1 py-1">
@@ -12,7 +12,7 @@
       <button href="/"
         class="text-black-700 hover:text-blue-600  cursor-pointer flex items-center justify-center gap-x-1 py-1">
         <Icon size="1.5em" name="mdi-light:home" />
-        Home
+        <NuxtLink to="/"> Home </NuxtLink>
       </button>
       <button href="/contact"
         class="text-black-700 hover:text-blue-600 cursor-pointer flex items-center justify-center gap-x-1 py-1">

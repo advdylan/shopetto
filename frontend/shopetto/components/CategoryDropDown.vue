@@ -10,12 +10,13 @@
     <ul class="list-inside  mx-3">
       <li
         v-for="category in parentCategories"
-        :key="category.id"
-        class="p-2 cursor-pointer"
+        :key="category.id" 
+        class="p-2"
         href="/product-list"
-        @mouseenter="() => chosenCategory = category">
-
-        <button class="inline-block border-b border-stone-300 shadow rounded-sm p-1 w-full hover:bg-stone-300 transition-colors duration-100"
+        @mouseenter="() => chosenCategory = category"
+        @click="routeToProductList(category)">
+        
+        <button class="inline-block border-b border-stone-300 shadow rounded-sm p-1 w-full hover:bg-stone-300 transition-colors duration-100  cursor-pointer"
               :class="active(category)">
           {{ category.name }}
     </button>  
@@ -31,8 +32,9 @@
       :key="category.id"
       class="p-2 cursor-pointer"
       @mouseenter="() => chosenSubCategory = category"
+      @click="routeToProductList(category)"
     >
-      <button class="inline-block border-b border-stone-300 shadow rounded-sm p-1 w-full  hover:bg-stone-300 transition-colors duration-100"
+      <button class="inline-block border-b border-stone-300 shadow rounded-sm p-1 w-full  hover:bg-stone-300 transition-colors duration-100 cursor-pointer"
       :class="activeSub(category)">
         {{ category.name }}
   </button>
@@ -64,16 +66,17 @@
 </template>
 
 <script setup lang="ts">
-import { componentNames } from '#components'
+import { routerKey, routerViewLocationKey } from 'vue-router'
 import { useCategoryStore } from '~/stores/products'
 import type { Category } from '~/types/category'
-import type { Product } from '~/types/product'
+
+const router = useRouter()
 
 
 
 const categoryStore = useCategoryStore()
-const {categories, products, chosenCategory, chosenSubCategory, childCategoryMap, parentCategories, chosenProducts } = storeToRefs(categoryStore)
-const { getChildrenOf } = categoryStore
+const {categories, products, chosenCategory, chosenSubCategory, childCategoryMap, parentCategories, chosenProducts, chosenCategoryForList, chosenSubCategoryForList } = storeToRefs(categoryStore)
+const { getChildrenOf,isParentCategory } = categoryStore
 
 const active = computed(() => (category: Category) => {
   return category?.id === chosenCategory.value?.id ? 'bg-stone-300' : ''
@@ -81,6 +84,18 @@ const active = computed(() => (category: Category) => {
 const activeSub = computed(() => (category: Category) => {
   return category?.id === chosenSubCategory.value?.id ? 'bg-stone-300' : ''
 })
+
+function routeToProductList(category: Category) {
+  router.push({path: "/product-list"})
+  if (isParentCategory(category)) {
+    chosenCategoryForList.value = category
+  }
+  else {
+    chosenSubCategoryForList.value = category
+  }
+  
+
+}
 
 
 onMounted(() => {
