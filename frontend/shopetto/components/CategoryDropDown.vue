@@ -91,7 +91,5 @@ onMounted(() => {
   if(categoryStore.products.length ===0) {
     categoryStore.fetchProducts()
   }
-  
-  
 })
 </script>
